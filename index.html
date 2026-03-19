@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ID Document Forgery Detection</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            text-align: center;
+        }
+
+        h1 {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .report {
+            margin: 30px auto;
+            width: 50%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        .status-good {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-bad {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🪪 ID Document Forgery Detection</h1>
+
+<div class="container">
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <br><br>
+        <button type="submit">Upload & Analyze</button>
+    </form>
+</div>
+
+{% if message %}
+<div class="report">
+    <h2>📊 Analysis Report</h2>
+
+    {% if message.error %}
+        <p style="color:red;">{{ message.error }}</p>
+    {% else %}
+        <p><strong>Blur Detected:</strong> {{ message.blur_detected }}</p>
+        <p><strong>Edge Score:</strong> {{ message.edge_score }}</p>
+        <p><strong>Text Length:</strong> {{ message.text_length }}</p>
+        <p><strong>Risk Score:</strong> {{ message.risk_score }}</p>
+        <p><strong>Confidence:</strong> {{ message.confidence }}%</p>
+
+        <p>
+            <strong>Final Status:</strong>
+            {% if message.final_status == "Likely Genuine" %}
+                <span class="status-good">{{ message.final_status }}</span>
+            {% else %}
+                <span class="status-bad">{{ message.final_status }}</span>
+            {% endif %}
+        </p>
+    {% endif %}
+</div>
+{% endif %}
+
+</body>
+</html>
